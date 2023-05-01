@@ -31,6 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# TODO: Правильно ли написано, может быть: "employees_app.CustomUser"?
+AUTH_USER_MODEL = 'employees_app.models.CustomUser'
 
 # Application definition
 
