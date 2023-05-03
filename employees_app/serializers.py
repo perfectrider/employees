@@ -4,9 +4,15 @@ from django.contrib.auth.hashers import make_password
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    employers = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Organization
-        fields = '__all__'
+        fields = ('id', 'name', 'description', 'employers')
+
+    def get_employers(self, obj):
+        employers = obj.customuser_set.values_list('email', flat=True)
+        return employers
 
 
 class ListCreateUserSerializer(serializers.ModelSerializer):
@@ -31,6 +37,12 @@ class ListCreateUserSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    organizations = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=Organization.objects.all()
+    )
+
     class Meta:
         model = CustomUser
         fields = (
@@ -44,11 +56,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id',)
 
-
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['organizations'] = OrganizationSerializer(
-            instance.organizations.all(),
-            many=True
-        ).data
+        representation['organizations'] = list(
+            instance.organizations.values_list('name', flat=True))
         return representation
