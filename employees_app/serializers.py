@@ -58,12 +58,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['organizations'] = OrganizationSerializer(
-            instance.organizations.all(), many=True).data
-        return representation
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
         representation['organizations'] = list(
             instance.organizations.values_list('name', flat=True))
         return representation
