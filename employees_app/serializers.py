@@ -14,6 +14,7 @@ class ListCreateUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = (
             'email',
+            'password',
             'first_name',
             'last_name',
             'phone',
@@ -21,6 +22,12 @@ class ListCreateUserSerializer(serializers.ModelSerializer):
             'image',
         )
         read_only_fields = ('organizations',)
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        validated_data['password'] = make_password(password)
+        return super().create(validated_data)
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -36,12 +43,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'image',
         )
         read_only_fields = ('id',)
-        extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        password = validated_data.pop('password')
-        validated_data['password'] = make_password(password)
-        return super().create(validated_data)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
