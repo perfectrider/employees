@@ -31,17 +31,19 @@ def test_get_organizations_not_auth(
 
 
 @pytest.mark.django_db
-def test_get_organizations(
+def test_put_organizations(
         auth_client,
         organizations_url,
-        organization_1,
-        organization_2,
 ):
-    response = auth_client.get(organizations_url)
+    payload = {
+        "name": "Sber",
+        "description": "Green Bank",
+    }
 
-    print(response.json()[0]['name'])
+    response = auth_client.post(organizations_url, payload)
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json()[0]['name'] == organization_1.name
-    assert response.json()[1]['name'] == organization_2.name
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data['name'] == payload['name']
+    assert response.data['description'] == payload['description']
+
 
