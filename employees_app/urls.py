@@ -1,10 +1,7 @@
 from django.urls import path
-from . views import (
-    UserCreateAPIView,
-    UserRetrieveAPIView,
-    UserListAPIView,
-    OrganizationsCreateAPIView,
-)
+
+from .views import (OrganizationsCreateAPIView, UserCreateAPIView,
+                    UserListAPIView, UserRetrieveAPIView)
 
 urlpatterns = [
     path('registration/', UserCreateAPIView.as_view()),
