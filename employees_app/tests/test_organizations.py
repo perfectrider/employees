@@ -5,6 +5,7 @@ from rest_framework import status
 @pytest.mark.django_db
 def test_get_organizations(
         auth_client,
+        user,
         organizations_url,
         organization_1,
         organization_2,
@@ -16,7 +17,7 @@ def test_get_organizations(
     assert response.json()[1]['name'] == organization_2.name
     assert response.json()[0]['description'] == organization_1.description
     assert response.json()[1]['description'] == organization_2.description
-
+    assert response.json()[0]['employers'][0] == user.email
 
 @pytest.mark.django_db
 def test_get_organizations_not_auth(
