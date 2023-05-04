@@ -1,14 +1,11 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status, exceptions
-from rest_framework import permissions
-from .permissions import IsOwner
+from rest_framework import exceptions, generics, permissions, status
 from rest_framework.response import Response
 
-from .serializers import (
-    CustomUserSerializer, OrganizationSerializer,
-    ListCreateUserSerializer
-)
 from .models import CustomUser, Organization
+from .permissions import IsOwner
+from .serializers import (CustomUserSerializer, ListCreateUserSerializer,
+                          OrganizationSerializer)
 
 get_user_model()
 

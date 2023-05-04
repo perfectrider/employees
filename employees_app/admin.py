@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import  CustomUser, Organization
+
+from .models import CustomUser, Organization
 
 
 class CustomUserAdmin(admin.ModelAdmin):
